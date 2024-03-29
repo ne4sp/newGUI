@@ -36,4 +36,60 @@ def buildbd(path):
             k += 1
     return bd
 
+def tclean(db, t1=None, t2=None):
+    t1 = float(t1)
+    t2 = float(t2)
+
+    for line in db.copy():
+        num = float(line.t)
+        if ((num < t2) and (num > t1)) is False:
+            db.remove(line)
+    return db
+
+
+def rvclean(db, rv=None, rv2=None):
+    rv = float(rv)
+    rv2 = float(rv2)
+
+    for line in db.copy():
+        num = float(line.t)
+        if ((num < rv2) and (num > rv)) is False:
+            db.remove(line)
+    return db
+
+
+def dateclean(db, d1=None, d2=None):
+    flag = False
+    s = '/'
+    date_oplimit = d1[6:10] + s + d1[3:5] + s + d1[:2]
+    date_cllimit = d2[6:10] + s + d2[3:5] + s + d2[:2]
+    time_oplimit = d1[-5:].strip()
+    time_cllimit = d2[-5:].strip()
+    mm_ol = int(date_oplimit[5:7])
+    mm_cl = int(date_cllimit[5:7])
+    dd1_ol = int(date_oplimit[8:])
+    dd1_cl = int(date_cllimit[8:])
+    hh1_ol = int(time_oplimit[:2])
+    hh1_cl = int(time_cllimit[:2])
+    m1_ol = int(time_oplimit[3:])
+    m1_cl = int(time_cllimit[3:])
+    for line in db.copy():
+        time = line.date[1]
+        date = line.date[0]
+        m = int(time[3:5])
+        hh = int(time[:2])
+        mm = int(date[5:7])
+        dd = int(date[8:])
+
+        if (mm == mm_ol) and (dd == dd1_ol):
+            if hh1_ol == hh:
+                if m < m1_ol:
+                    flag = True
+        if (mm == mm_cl) and (dd == dd1_cl):
+            if hh1_cl == hh:
+                if m < m1_cl:
+                    flag = False
+        if flag == False:
+            db.remove(line)
+    return db
 

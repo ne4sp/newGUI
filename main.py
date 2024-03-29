@@ -1,16 +1,88 @@
 import sys
+import numpy as np
+import pyqtgraph as pg
 
+from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog, QDialog, QMessageBox
 
-from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog, QPushButton
-
-from ui_main2 import Ui_MainWindow
-
+from ui_main4 import Ui_MainWindow
+from settingsui2 import Ui_Dialog
+from checkLog import createtemp
+from createBase import buildbd, tclean, rvclean, dateclean
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+
+        self.ui.editButton.clicked.connect(self.open_settings_window)
+        self.ui.inputButton.clicked.connect(self.choose_file_input)
+        self.ui.showButton.clicked.connect(self.showgp)
+
+        self.ui.leftButton.clicked.connect(self.swipe_left_gp)
+        self.ui.rightButton.clicked.connect(self.swipe_right_gp)
+        self.bd = []
+        self.iter_k = 0
+        self.iter_j = 1
+
+    def open_settings_window(self):
+        self.new_window = QDialog()
+        self.ui_window = Ui_Dialog()
+        self.ui_window.setupUi(self.new_window)
+        self.new_window.show()
+        self.ui_window.buttonBox.clicked.connect(self.create_db)
+
+    def create_db(self):
+        createtemp(self.ui.inputLine.text())
+        data1 = self.ui_window.changeDate1.text()
+        print(data1)
+        data2 = self.ui_window.changeDate2.text()
+        print(data2)
+        rv1 = self.ui_window.rv1Change.value()
+        rv2 = self.ui_window.rv2Change.value()
+        t1 = self.ui_window.t1Change.value()
+        t2 = self.ui_window.t2Change.value()
+
+        db = buildbd('temp2.txt')
+        db = dateclean(db, data1, data2)
+        print(db)
+        # db = rvclean(db, rv1, rv2)
+        # db = tclean(db, t1, t2)
+        self.bd = db
+    def choose_file_input(self):
+        self.ui.inputLine.setText(QFileDialog.getOpenFileName()[0])
+
+    def swipe_left_gp(self):
+        if self.iter_j-1 < 0:
+            return QMessageBox().setWindowTitle('Ошибка')
+        self.iter_j -= 1
+        self.iter_k -= 1
+        self.showgp()
+
+    def swipe_right_gp(self):
+        self.iter_j += 1
+        self.iter_k += 1
+        self.showgp()
+
+    def showgp(self):
+        colors = [
+            [0, 0, 0], [255, 0, 0], [0, 255, 0], [0, 0, 255], [255, 255, 0],
+            [0, 255, 255], [255, 0, 255], [128, 0, 0], [128, 128, 0], [0, 128, 0],
+            [128, 0, 128], [0, 128, 128], [0, 0, 128], [255, 140, 0], [139, 69, 19],
+            [154, 205, 50], [0, 255, 127], [123, 104, 238], [210, 105, 30], [75, 0, 130],
+            [0, 140, 255], [255, 176, 173], [212, 153, 58], [138, 208, 255], [221, 255, 0]
+        ]
+        bd = self.bd
+        cl = 0
+        x = np.arange(0, 128)
+        self.ui.graphicsView.plot(clear='True')
+        for i in range(25*self.iter_k, 25*self.iter_j):
+            self.ui.graphicsView.plot(
+                x, bd[i].lvpack, pen=pg.mkPen(color=(colors[cl][0], colors[cl][1], colors[cl][2])),
+                name=bd[i].date[0] + '-' + bd[i].date[1] + "/t=" + bd[i].t + "/v=" + bd[i].rv)
+            cl += 1
+
+
 
 
 
@@ -19,5 +91,6 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     window = MainWindow()
     window.show()
+
 
     sys.exit(app.exec())
