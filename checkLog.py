@@ -3,7 +3,7 @@ import linecache
 
 def createtemp(path):
     flag = False
-    f2 = open('temp1.txt', 'a')
+    f2 = open('temp1.txt', 'w+')
     with open(path, 'r') as f:
         for line in f:
             if 'Date: ' in line:
@@ -20,7 +20,7 @@ def createtemp(path):
     f2.close()
 
     i = 0
-    finfile = open('temp2.txt', 'a')
+    finfile = open('temp2.txt', 'w+')
     with open('temp1.txt', 'r') as f:
         for lines in f:
             i += 1

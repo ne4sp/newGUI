@@ -58,13 +58,33 @@ def rvclean(db, rv=None, rv2=None):
     return db
 
 
+def st(path):
+    a = ''
+    with open(path, 'r') as f:
+        for line in f:
+            a = (re.findall(r'\d{4}/\d\d/\d\d|\d\d:\d\d:\d\d', line))[1]
+            print(a)
+            break
+    y4 = int(a[:4])
+    m2=  int(a[5:7])
+    d2 = int(a[-2:])
+    m = [y4, m2, d2]
+    return m
+
+
 def dateclean(db, d1=None, d2=None):
     flag = False
     s = '/'
     date_oplimit = d1[6:10] + s + d1[3:5] + s + d1[:2]
+    print(date_oplimit)
     date_cllimit = d2[6:10] + s + d2[3:5] + s + d2[:2]
+    print(date_cllimit)
     time_oplimit = d1[-5:].strip()
+    # if time_oplimit[0] == '0':
+    #     time_oplimit = '0' + time_oplimit
     time_cllimit = d2[-5:].strip()
+    # if time_cllimit[0] == '0':
+    #     time_cllimit = '0' + time_cllimit
     mm_ol = int(date_oplimit[5:7])
     mm_cl = int(date_cllimit[5:7])
     dd1_ol = int(date_oplimit[8:])

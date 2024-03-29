@@ -41,8 +41,7 @@ class Ui_Dialog(object):
 
         self.changeDate1 = QDateTimeEdit(Dialog)
         self.changeDate1.setObjectName(u"changeDate1")
-        self.changeDate1.setMaximumDateTime(QDateTime(QDate(2025, 9, 14), QTime(22, 21, 45)))
-        self.changeDate1.setMinimumDateTime(QDateTime(QDate(2024, 3, 14), QTime(10, 10, 10)))
+        self.changeDate1.setMinimumDateTime(QDateTime(QDate(2024, 3, 12), QTime(10, 10, 10)))
         self.changeDate1.setCalendarPopup(False)
 
         self.horizontalLayout.addWidget(self.changeDate1)
@@ -59,8 +58,7 @@ class Ui_Dialog(object):
 
         self.changeDate2 = QDateTimeEdit(Dialog)
         self.changeDate2.setObjectName(u"changeDate2")
-        self.changeDate2.setMaximumDateTime(QDateTime(QDate(2025, 9, 14), QTime(22, 21, 45)))
-        self.changeDate2.setMinimumDateTime(QDateTime(QDate(2024, 3, 14), QTime(10, 10, 10)))
+        self.changeDate2.setMinimumDateTime(QDateTime(QDate(2024, 3, 12), QTime(10, 10, 10)))
         self.changeDate2.setCalendarPopup(False)
 
         self.horizontalLayout_2.addWidget(self.changeDate2)
@@ -161,15 +159,12 @@ class Ui_Dialog(object):
         QMetaObject.connectSlotsByName(Dialog)
     # setupUi
 
-    def buttonBox_was_clicked(self):
-        print(self.changeDate2.text())
-        print(self.rv1Change.value())
 
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(QCoreApplication.translate("Dialog", u"settings", None))
         self.label.setText(QCoreApplication.translate("Dialog", u"from", None))
-        # self.changeDate1.setDisplayFormat(QCoreApplication.translate("Dialog", u"yyyy/MM/dd H:mm", None))
-        # self.changeDate2.setDisplayFormat(QCoreApplication.translate("Dialog", u"yyyy/MM/dd H:mm", None))
+        self.changeDate1.setDisplayFormat(QCoreApplication.translate("Dialog", u"yyyy/MM/dd H:mm", None))
+        self.changeDate2.setDisplayFormat(QCoreApplication.translate("Dialog", u"yyyy/MM/dd H:mm", None))
         self.label_2.setText(QCoreApplication.translate("Dialog", u"to", None))
         self.label_3.setText(QCoreApplication.translate("Dialog", u"t1", None))
         self.label_4.setText(QCoreApplication.translate("Dialog", u"t2", None))
